@@ -9,12 +9,12 @@
 
 for p in $@; do
     if [ ${p:0:1} = "-" ]; then
-	    OPTIONS="$OPTIONS $p"
-	elif [[ -f "$p" ]]; then
-	    FILES="$FILES $p"
-	else
-	    OPTIONS="$OPTIONS $p"
-	fi
+        OPTIONS="$OPTIONS $p"
+    elif [[ -f "$p" ]]; then
+        FILES="$FILES $p"
+    else
+        OPTIONS="$OPTIONS $p"
+    fi
 done
 
 #-------------------------------------------------------------------
@@ -32,7 +32,7 @@ for f in $FILES; do
 
 
 	# run the resulting binary to generate the impulse response
-	./"${f%.dsp}" -n 60000
+	./"${f%.dsp}" -inpl -n 60000
 
 	# cleanup
     rm "${f%.dsp}" "$f.cpp"
