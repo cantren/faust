@@ -794,6 +794,10 @@ void Klass::println(int n, ostream& fout)
     tab(n+1,fout); fout << "int fSamplingFreq;\n";
 
     tab(n,fout); fout << "  public:";
+    
+    if (gMemoryManager) {
+        tab(n+1,fout); fout << "static dsp_memory_manager* fManager;" << endl;
+    }
 
     printMetadata(n+1, gMetaDataSet, fout);
 
@@ -813,16 +817,12 @@ void Klass::println(int n, ostream& fout)
                     << "return " << fNumOutputs
                     << "; }";
 
-    if (gMemoryManager) {
-        tab(n+1,fout); fout << "static void classInit(int samplingFreq, dsp_memory_manager* manager) {";
-    } else {
-        tab(n+1,fout); fout << "static void classInit(int samplingFreq) {";
-    }
+    tab(n+1,fout); fout << "static void classInit(int samplingFreq) {";
         printlines (n+2, fStaticInitCode, fout);
     tab(n+1,fout); fout << "}";
     
     if (gMemoryManager) {
-        tab(n+1,fout); fout << "static void classDestroy(dsp_memory_manager* manager) {";
+        tab(n+1,fout); fout << "static void classDestroy() {";
             printlines (n+2, fStaticDestroyCode, fout);
         tab(n+1,fout); fout << "}";
     }
@@ -872,7 +872,11 @@ void Klass::println(int n, ostream& fout)
 	tab(n,fout); fout << "};\n" << endl;
 
 	printlines(n, fStaticFields, fout);
-
+    
+    if (gMemoryManager) {
+        tab(n, fout); fout << "dsp_memory_manager* " << fKlassName <<"::fManager = 0;" << endl;
+    }
+    
 	// generate user interface macros if needed
 	if (gUIMacroSwitch) {
 		tab(n, fout); fout << "#ifdef FAUST_UIMACROS";
