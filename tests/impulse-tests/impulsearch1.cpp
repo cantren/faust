@@ -283,5 +283,7 @@ int main(int argc, char* argv[])
     DSP->~mydsp();
     manager.destroy(DSP);
     
+    mydsp::classDestroy(&manager);
+    
     return 0;
 }
